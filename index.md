@@ -30,6 +30,7 @@ The repository provides **deliberately hostile test cases** designed to expose u
 
 * [test1.html](test1.html) - simple redteam test that will test security of a llm
 * [test2.html](test2.html) - simple redteam test with unicode to test the security of a llm
+* [test3.html](test3.html) - simple redteam test with cylic to test the security of a llm
 
 ---
 
