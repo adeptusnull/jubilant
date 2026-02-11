@@ -1,0 +1,25 @@
+title: Jubilant
+description: AI Sec Test - A GitHub Pages Starter
+theme: minima
+
+# Build settings
+markdown: kramdown
+
+# Collections
+collections: []
+
+# Exclude from processing
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
