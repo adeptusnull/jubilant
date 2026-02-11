@@ -1,5 +1,10 @@
 # 🔒 jubilant
 
+For a description Read Below 
+
+Find the Repo Here 
+[Jubilant](https://github.com/adeptusnull/jubilant)
+
 ## AI Web Fetch Red Team Test Suite
 
 **jubilant** is a security-focused test repository for evaluating vulnerabilities introduced when AI agents are allowed to fetch, parse, and reason over external web content.
@@ -64,15 +69,4 @@ If your agent fails here, it is not safe to fetch arbitrary webpages.
 > HTML is not documentation.
 > Authority does not propagate through fetch.
 
-This repository exists to enforce those boundaries.
-
----
-
-If you want, next I can:
-
-* Tighten the repo tagline to be even sharper
-* Write a CONTRIBUTING.md with red-team rules
-* Add a SECURITY.md explaining responsible disclosure
-* Create a badge-worthy “agent passed these tests” rubric
-
-Say which direction you want to go.
+This repository exists to enforce those boundaries
