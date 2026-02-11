@@ -1,8 +1,8 @@
 # 🔒 jubilant
 
-For a description Read Below 
+For a description Read Below
 
-Find the Repo Here 
+Find the Repo Here
 [Jubilant](https://github.com/adeptusnull/jubilant)
 
 ## AI Web Fetch Red Team Test Suite
@@ -18,6 +18,13 @@ This project is dedicated to **red team testing of web scraping pipelines**, wit
 * Inadequate sanitization and normalization steps
 
 The repository provides **deliberately hostile test cases** designed to expose unsafe assumptions in retrieval, extraction, and summarization workflows.
+
+---
+
+## Test Cases
+
+* [test1.html](test1.html) - simple redteam test that will test security of a llm
+* [test2.html](test2.html) - simple redteam test with unicode to test the security of a llm
 
 ---
 
