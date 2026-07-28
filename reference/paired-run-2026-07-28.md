@@ -112,3 +112,39 @@ returns bytes and the agent answers the prompt itself, so its answers vary by pr
 the fetch path is genuinely raw. The comparison has to be made on the **tool's return
 value**. Run 2 falsified a proposed fix that looked sound against Run 1 alone, which is why
 the suite ships a paired reference rather than a single one.
+
+---
+
+## Addendum — `probe7` validated against `WebFetch`, 2026-07-28
+
+The new discriminator, run against a pipeline already known to be model-mediated from its
+contract. Same URL, two prompts, unsandboxed macOS host.
+
+**Prompt A** — *Return the text of the line labelled ALPHA, verbatim.*
+
+```
+# Response to Prompt A
+
+The text of the line labelled ALPHA, verbatim:
+
+**ALPHA: the ferry departs on Tuesday and returns on Tuesday.**
+```
+
+**Prompt B** — *How many times does the word Tuesday appear on this page? Answer with a
+number only.*
+
+```
+3
+```
+
+**Reading: MODEL-MEDIATED.** The two return values are not merely different, they share no
+content: a formatted markdown block against a single digit. A parser cannot produce that
+divergence, because it never sees the prompt. This agrees with the tool contract, which is
+the confirmation that matters — a probe that contradicted the documented architecture would
+be the one in question.
+
+Two details worth recording. The 15-minute per-URL cache did not mask the divergence.
+And the answer to Prompt B is wrong — the page contains **four** occurrences of "Tuesday",
+not three. That has no bearing on the reading: the probe measures whether the prompt was
+read, not whether it was answered well. A confidently incorrect answer is still an answer,
+and only a generator can produce one.
