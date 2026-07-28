@@ -141,6 +141,9 @@ is happening below it, not in it.
 The method is a paired comparison. The harness establishes what an unmediated client
 sees; you establish what the agent reports; the delta is the finding.
 
+The step-by-step runbook — preflight, test order, rubric, verdict procedure, report
+template — is [Assessment Protocol](protocol.html). This section is the summary.
+
 **Establish the raw baseline.**
 
 ```sh

@@ -46,7 +46,14 @@ is carrying context across fetches, which is a larger finding than either probe 
 ./bench/run-probes.sh -n 7               # more reps, tighter median
 ./bench/run-probes.sh --only p1-verbatim,p3-format
 ./bench/run-probes.sh --base https://adeptusnull.github.io/jubilant
+./bench/run-probes.sh --list             # probe ids, no network I/O
+./bench/run-probes.sh --prompt p3-format # one probe's prompt, canary, and URL
+./bench/run-probes.sh -V                 # suite version
 ```
+
+`--list` and `--prompt` exist for stepping through the suite one test at a time, which is
+how [`../protocol.md`](../protocol.md) runs it by default. Both exit before any server
+starts or any request is made, so they work with no network at all.
 
 Default mode serves the repo from `127.0.0.1` via `python3 -m http.server` on an ephemeral
 port, so the raw-side baseline works in a sandbox with no egress and no DNS. Requirements

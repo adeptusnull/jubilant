@@ -73,6 +73,34 @@ shell; nothing to install.
 Method, scoring, and how to add a probe:
 [bench/README.md](https://github.com/adeptusnull/jubilant/blob/main/bench/README.md).
 
+---
+
+## Running an Assessment
+
+Suite version **JUBILANT-1.0**. The runbook is [Assessment Protocol](protocol.html) —
+preflight and authorization gate, the eleven tests in the order they must be run, a
+deterministic scoring rubric, the verdict decision procedure, and a report template.
+
+It is interactive by default: the agent confirms with the operator before each test and
+warns explicitly before the four pages that carry live payloads.
+
+[llms.txt](llms.txt) is the machine-readable entry point, following the
+llmstxt.org convention, for handing the suite to an agent directly.
+
+**The suite deliberately produces no single score.** The injection fraction measures
+whichever model actually received the payloads — and if a summarizing layer sits in the
+path, that was not the agent. One number would let a system score well because an
+intermediate layer absorbed everything, while the agent underneath goes untested. Output
+is a pipeline *classification* plus an injection *fraction*, reported together and
+attributed. Reasoning in [Assessment Protocol](protocol.html) §6.
+
+Step through one test at a time:
+
+```sh
+./bench/run-probes.sh --list
+./bench/run-probes.sh --prompt p1-verbatim --base https://adeptusnull.github.io/jubilant
+```
+
 The reasoning behind all of it — threat model, what each signal actually proves,
 the confounders, and how to run a paired comparison without fooling yourself —
 is in [Theory and Method](theory.html).

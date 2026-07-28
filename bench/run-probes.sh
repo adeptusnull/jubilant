@@ -17,9 +17,15 @@
 #   ./bench/run-probes.sh -n 7                     # more reps, tighter median
 #   ./bench/run-probes.sh --base https://adeptusnull.github.io/jubilant
 #   ./bench/run-probes.sh --only p1-verbatim,p3-format
-#   ./bench/run-probes.sh --save probes/probe1-verbatim.html   # dump raw body
+#   ./bench/run-probes.sh --list                   # probe ids, one per line
+#   ./bench/run-probes.sh --prompt p1-verbatim     # one probe's agent prompt
+#
+# --list and --prompt exist for stepping through the suite one test at a time,
+# which is how protocol.md runs it by default. They do no network I/O.
 #
 set -euo pipefail
+
+SUITE_VERSION="JUBILANT-1.0"
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 MANIFEST="$REPO_ROOT/bench/probes.tsv"
@@ -30,11 +36,13 @@ REPS=3
 ONLY=""
 PORT=0
 SERVER_PID=""
+LIST_ONLY=0
+PROMPT_ID=""
 
 die() { printf 'error: %s\n' "$*" >&2; exit 1; }
 
 usage() {
-    sed -n '3,25p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
+    sed -n '3,27p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
     exit 0
 }
 
@@ -44,6 +52,9 @@ while [ $# -gt 0 ]; do
         -n|--reps) REPS="${2:-}"; shift 2 ;;
         --only)   ONLY="${2:-}"; shift 2 ;;
         --port)   PORT="${2:-}"; shift 2 ;;
+        --list)   LIST_ONLY=1; shift ;;
+        --prompt) PROMPT_ID="${2:-}"; shift 2 ;;
+        -V|--version) printf '%s\n' "$SUITE_VERSION"; exit 0 ;;
         -h|--help) usage ;;
         *) die "unknown argument: $1 (try --help)" ;;
     esac
@@ -52,6 +63,34 @@ done
 command -v curl >/dev/null 2>&1 || die "curl not found"
 [ -f "$MANIFEST" ] || die "manifest not found: $MANIFEST"
 case "$REPS" in ''|*[!0-9]*) die "--reps must be an integer" ;; esac
+
+# --- offline modes ----------------------------------------------------------
+# Both exit before any server starts or any request is made.
+if [ "$LIST_ONLY" = "1" ]; then
+    while IFS=$'\t' read -r id path canary prompt; do
+        case "$id" in ''|'#'*) continue ;; esac
+        printf '%-14s %s\n' "$id" "$path"
+    done < "$MANIFEST"
+    exit 0
+fi
+
+if [ -n "$PROMPT_ID" ]; then
+    found=0
+    while IFS=$'\t' read -r id path canary prompt; do
+        case "$id" in ''|'#'*) continue ;; esac
+        [ "$id" = "$PROMPT_ID" ] || continue
+        found=1
+        if [ -n "$BASE" ]; then
+            printf 'url:    %s/%s\n' "${BASE%/}" "$path"
+        else
+            printf 'path:   %s   (pass --base for a fetchable URL)\n' "$path"
+        fi
+        printf 'canary: %s\n' "$canary"
+        printf 'prompt: %s\n' "$prompt"
+    done < "$MANIFEST"
+    [ "$found" = "1" ] || die "no such probe: $PROMPT_ID (try --list)"
+    exit 0
+fi
 
 # --- local server -----------------------------------------------------------
 # Serving from disk keeps the run hermetic: no DNS, no TLS, no CDN variance in
@@ -111,7 +150,7 @@ SCORESHEET="$RESULTS_DIR/scoresheet-$STAMP.md"
 
 printf 'id\tpath\thttp\tbytes\tlat_min_s\tlat_med_s\tcanary\tsha256_16\n' > "$RAW_TSV"
 
-printf '\n  jubilant raw-side baseline\n'
+printf '\n  jubilant raw-side baseline (%s)\n' "$SUITE_VERSION"
 printf '  mode : %s\n' "$MODE"
 printf '  reps : %s\n' "$REPS"
 printf '  out  : %s\n\n' "${RAW_TSV#"$REPO_ROOT"/}"
@@ -169,6 +208,7 @@ done < "$MANIFEST"
 # in place as the comparison column.
 {
     printf '# Probe run %s\n\n' "$STAMP"
+    printf -- '- suite: `%s`\n' "$SUITE_VERSION"
     printf -- '- mode: `%s`\n' "$MODE"
     printf -- '- reps: %s\n' "$REPS"
     printf -- '- raw baseline: `%s`\n\n' "${RAW_TSV##*/}"
