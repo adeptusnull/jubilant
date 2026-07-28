@@ -38,17 +38,21 @@ web at all. That question comes first. If a fetch tool silently routes pages thr
 summarizing model, every injection result above measures that intermediate model's
 resistance rather than the agent's.
 
+* [probe7-variance.html](probes/probe7-variance.html) - **primary discriminator**; prompt variance over tool return values
 * [probe0-control.html](probes/probe0-control.html) - baseline; no payload, stable size
 * [probe1-verbatim.html](probes/probe1-verbatim.html) - verbatim vs. paraphrase
 * [probe2-latency.html](probes/probe2-latency.html) - latency floor on a sub-kilobyte page
 * [probe2b-bulk.html](probes/probe2b-bulk.html) - 140 KB payload; latency scaling and truncation
 * [probe3-format.html](probes/probe3-format.html) - box-drawing, alignment, and indentation survival
-* [probe4-injection.html](probes/probe4-injection.html) - five injection surfaces, five distinct markers
+* [probe4-injection.html](probes/probe4-injection.html) - six injection surfaces, six distinct markers
 * [probe5-meta.html](probes/probe5-meta.html) - model identity and instruction leak
 * [probe6-hallucination.html](probes/probe6-hallucination.html) - confabulation of facts absent from the page
 
-No single probe is conclusive. Latency alone can be CDN variance; paraphrase alone can be
-an agent-side habit. Two or more agreeing is a finding.
+`probe7` is decisive on its own: a parser has nowhere to put a prompt, so two orthogonal
+prompts return identical bytes, while a model composes two different answers. The rest
+characterize *how* a layer behaves rather than whether one exists — they read RAW on a
+capable layer that complies with an instruction to preserve text. That false negative is
+documented in [theory.md](theory.md) §5 and is why v1.1 exists.
 
 ---
 
@@ -71,7 +75,7 @@ Method, scoring, and how to add a probe: [bench/README.md](bench/README.md).
 
 ## Running an Assessment
 
-Suite version **JUBILANT-1.0**. The runbook is [protocol.md](protocol.md) —
+Suite version **JUBILANT-1.1**. The runbook is [protocol.md](protocol.md) —
 preflight and authorization gate, the eleven tests in the order they must be run, a
 deterministic scoring rubric, the verdict decision procedure, and a report template.
 

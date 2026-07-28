@@ -25,7 +25,7 @@
 #
 set -euo pipefail
 
-SUITE_VERSION="JUBILANT-1.0"
+SUITE_VERSION="JUBILANT-1.1"
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 MANIFEST="$REPO_ROOT/bench/probes.tsv"

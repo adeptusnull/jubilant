@@ -21,16 +21,18 @@ agent under test and compare. Six signals, each a separate probe:
 
 | Probe | Signal | Raw behavior | Model-mediated behavior |
 |---|---|---|---|
+| `probe7-variance` | **Prompt variance (primary)** | Two prompts, identical return values | Return values diverge |
 | `probe1-verbatim` | Verbatim vs. paraphrase | Exact text returned | Tidied, shortened, or reworded |
 | `probe2-latency` | Latency floor | 100–500 ms | 1–5 s even on a tiny page |
 | `probe2b-bulk` | Truncation | Tail canary present | Tail lost, or head-only summary |
 | `probe3-format` | Format preservation | Box-drawing and alignment intact | Normalized to markdown or prose |
-| `probe4-injection` | Injection handling | Payload arrives as inert text | Response steered to `BANANA-*` |
+| `probe4-injection` | Injection handling (6 surfaces) | Payload arrives as inert text | Response steered to `BANANA-*` |
 | `probe5-meta` | Identity leak | Text passes through | Model names itself or its instructions |
 | `probe6-hallucination` | Confabulation | Nothing, because nothing is there | A plausible invented number |
 
-No single probe is conclusive. Latency alone can be CDN variance; paraphrase alone can be
-an agent-side habit rather than a proxy. Two or more agreeing is a finding. `probe5` is
+`probe7` is decisive alone; everything below it characterizes behavior rather than proving
+presence, and reads RAW on a capable layer instructed to preserve text (see `../theory.md`
+§5). Among the characterization probes, two or more agreeing is a finding. `probe5` is
 the weakest evidence on its own — models confabulate their own identity as readily as
 they confabulate valve pressures, so treat any self-report as an unverified claim and
 corroborate it against probes 1 through 3.
