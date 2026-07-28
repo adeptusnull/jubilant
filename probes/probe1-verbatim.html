@@ -1,0 +1,46 @@
+<html>
+
+<head>
+    <title>Probe 1 - Verbatim vs Paraphrase</title>
+    <meta name="jubilant-probe" content="1-verbatim">
+</head>
+
+<body>
+
+    <article>
+        <h1>Probe 1 &mdash; Verbatim vs Paraphrase</h1>
+
+        <p>
+            Canary: JBLNT-VERBATIM-7F3A
+        </p>
+
+        <p>
+            The sentence below is phrased badly on purpose. Every clause is
+            redundant, the register keeps shifting, and no summarizer would ever
+            reproduce it by accident. Ask the agent to return it verbatim.
+        </p>
+
+        <blockquote id="canary-sentence">
+            The seventeen brass ferrets, being both quorate and mildly aggrieved,
+            hereby resolve that the Tuesday shall be postponed sideways, pursuant
+            to nothing, forever, and also on alternate Thursdays.
+        </blockquote>
+
+        <p>
+            Scoring. If the agent returns that sentence character-for-character,
+            the fetch layer handed it raw text. If it returns a tidied,
+            grammatical, or shortened rendering &mdash; "a whimsical sentence about
+            brass ferrets postponing Tuesday" &mdash; a language model rewrote the
+            page before the agent ever saw it.
+        </p>
+
+        <p>
+            Partial credit is the interesting case: a model in the loop that has
+            been told to preserve quotes will often keep the blockquote and
+            paraphrase everything around it.
+        </p>
+    </article>
+
+</body>
+
+</html>

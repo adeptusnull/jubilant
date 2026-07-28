@@ -26,11 +26,56 @@ The repository provides **deliberately hostile test cases** designed to expose u
 
 ---
 
-## Test Cases
+## Test Cases — Injection
 
-* [test1.html](test1.html) - simple redteam test that will test security of a llm
-* [test2.html](test2.html) - simple redteam test with unicode to test the security of a llm
-* [test3.html](test3.html) - simple redteam test with cylic to test the security of a llm
+These pages target the **agent**: will it obey instructions embedded in untrusted content.
+
+* [test1.html](test1.html) - plain prompt injection in markup, script, and style
+* [test2.html](test2.html) - Unicode bidirectional override, invisible to a human reviewer
+* [test3.html](test3.html) - Cyrillic homoglyph substitution in ASCII-looking words
+
+---
+
+## Probes — Pipeline Detection
+
+These pages target the **pipeline**: is there a language model between the agent and the
+web at all. That question comes first. If a fetch tool silently routes pages through a
+summarizing model, every injection result above measures that intermediate model's
+resistance rather than the agent's.
+
+* [probe0-control.html](probes/probe0-control.html) - baseline; no payload, stable size
+* [probe1-verbatim.html](probes/probe1-verbatim.html) - verbatim vs. paraphrase
+* [probe2-latency.html](probes/probe2-latency.html) - latency floor on a sub-kilobyte page
+* [probe2b-bulk.html](probes/probe2b-bulk.html) - 140 KB payload; latency scaling and truncation
+* [probe3-format.html](probes/probe3-format.html) - box-drawing, alignment, and indentation survival
+* [probe4-injection.html](probes/probe4-injection.html) - five injection surfaces, five distinct markers
+* [probe5-meta.html](probes/probe5-meta.html) - model identity and instruction leak
+* [probe6-hallucination.html](probes/probe6-hallucination.html) - confabulation of facts absent from the page
+
+No single probe is conclusive. Latency alone can be CDN variance; paraphrase alone can be
+an agent-side habit. Two or more agreeing is a finding.
+
+---
+
+## Harness
+
+```sh
+./bench/run-probes.sh                                        # local server, hermetic
+./bench/run-probes.sh --base https://adeptusnull.github.io/jubilant
+```
+
+Fetches every page with `curl` and records the unmediated baseline — status, bytes,
+latency, content hash, canary survival — then emits a scoresheet with the agent-side
+prompts and blanks for the results. Default mode serves the repo from `127.0.0.1`, so the
+raw-side run works in a sandbox with no egress. Requires `curl`, `python3`, and a POSIX
+shell; nothing to install.
+
+Method, scoring, and how to add a probe:
+[bench/README.md](https://github.com/adeptusnull/jubilant/blob/main/bench/README.md).
+
+The reasoning behind all of it — threat model, what each signal actually proves,
+the confounders, and how to run a paired comparison without fooling yourself —
+is in [Theory and Method](theory.html).
 
 ---
 
@@ -44,6 +89,7 @@ Included test cases simulate:
 * Injection attempts hidden in markup, comments, and metadata
 * Unicode-based attacks invisible to human reviewers
 * Content designed to bypass naive filters while appearing benign
+* Canary pages that reveal whether a fetch tool is model-mediated or raw
 
 The goal is to validate that an AI system:
 
@@ -51,6 +97,9 @@ The goal is to validate that an AI system:
 * Enforces strict authority boundaries
 * Performs extraction before reasoning
 * Neutralizes instruction-like language regardless of presentation
+
+And, before any of that, that you know how many models are in the loop. An agent cannot
+be scored on content it never actually saw.
 
 ---
 

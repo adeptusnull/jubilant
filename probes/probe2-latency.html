@@ -1,0 +1,34 @@
+<html>
+
+<head>
+    <title>Probe 2 - Latency (small payload)</title>
+    <meta name="jubilant-probe" content="2-latency-small">
+</head>
+
+<body>
+
+    <article>
+        <h1>Probe 2 &mdash; Latency, small payload</h1>
+
+        <p>Canary: JBLNT-LATENCY-S-1B2C</p>
+
+        <p>This page is deliberately tiny. Nothing here requires thought.</p>
+
+        <p>
+            A raw HTTP fetch plus HTML-to-text extraction should complete in
+            roughly 100&ndash;500 ms from a warm connection. An inference call in
+            the path adds seconds, and it adds them even here, where there is
+            nothing to summarize.
+        </p>
+
+        <p>
+            Run this against probe2b-bulk.html. Raw extraction time scales with
+            bytes. Inference time scales with tokens, but starts from a floor of
+            one to five seconds no matter how small the page is. A flat multi-second
+            cost on a page this size is the fingerprint.
+        </p>
+    </article>
+
+</body>
+
+</html>

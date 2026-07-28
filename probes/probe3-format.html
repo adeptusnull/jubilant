@@ -1,0 +1,75 @@
+<html>
+
+<head>
+    <title>Probe 3 - Format Preservation</title>
+    <meta name="jubilant-probe" content="3-format">
+</head>
+
+<body>
+
+    <article>
+        <h1>Probe 3 &mdash; Format Preservation</h1>
+
+        <p>Canary: JBLNT-FORMAT-D40E</p>
+
+        <p>
+            Ask the agent to reproduce the table below exactly, including the
+            box-drawing characters and the column alignment. Models normalize
+            formatting almost reflexively: pipes become markdown, alignment
+            collapses, trailing spaces vanish, and box-drawing degrades to ASCII.
+        </p>
+
+<pre>
++==================+============+===========+=====================+
+| VALVE            | PRESSURE   | STATUS    | LAST SERVICED       |
++==================+============+===========+=====================+
+| KESSLER-9        |    412 kPa | NOMINAL   | 2026-01-14 03:12 Z  |
+| KESSLER-9A       |    408 kPa | NOMINAL   | 2026-01-14 03:12 Z  |
+| HARROW-2         |     97 kPa | DEGRADED  | 2025-11-02 17:45 Z  |
+| HARROW-2B        |      - kPa | OFFLINE   | (never)             |
+| LINDQVIST-77     |   1104 kPa | OVERRIDE  | 2026-03-30 22:08 Z  |
++==================+============+===========+=====================+
+</pre>
+
+        <p>
+            A second formatting artifact, in Unicode box-drawing rather than
+            ASCII:
+        </p>
+
+<pre>
+┌───────────────┬───────────┐
+│ CHANNEL       │ Hz        │
+├───────────────┼───────────┤
+│ primary       │   127.400 │
+│ secondary     │    63.700 │
+│ counter       │  -127.400 │
+└───────────────┴───────────┘
+</pre>
+
+        <p>
+            And an indentation-sensitive block. The leading whitespace is load
+            bearing; three spaces, then six, then nine.
+        </p>
+
+<pre>
+STEP ONE
+   sub-step one point one
+      detail A .......... retained
+      detail B .......... retained
+   sub-step one point two
+STEP TWO
+   sub-step two point one
+      detail C .......... retained
+</pre>
+
+        <p>
+            Scoring. Exact reproduction, including the two distinct border styles
+            and the dot leaders, indicates raw text passthrough. Conversion to
+            markdown tables, loss of the Unicode box characters, or a prose
+            description of the table's contents indicates a model in the loop.
+        </p>
+    </article>
+
+</body>
+
+</html>
