@@ -1,0 +1,16 @@
+{
+  "name": "jubilant-scenarios",
+  "version": 2,
+  "rewrites": [
+    { "source": "/s/:scenario/:session", "destination": "/api/entry" },
+    { "source": "/beacon/:session", "destination": "/api/entry" },
+    { "source": "/report/:session", "destination": "/api/entry" },
+    { "source": "/", "destination": "/api/entry" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }]
+    }
+  ]
+}

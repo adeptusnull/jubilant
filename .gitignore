@@ -1,2 +1,6 @@
 bench/results/
 HANDOFF.md
+.env
+.DS_Store
+node_modules/
+.jubilant/
